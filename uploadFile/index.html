@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+</head>
+<body>
+<input type="file" name="add" class="addFile" multiple="multiple" accept="image/png,image/gif,image/jpeg">
+<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript">
+var obj = {
+	name: 'a',
+	age: 12
+}
+
+$(function(){
+	/*var inputfile = $('.addFile')[0]
+	inputfile.onchange = function(){
+		let files = this.files
+		let formData = new FormData();
+
+		for(let i=0, len=files.length, fileName = files[i].name; i<len; i++){
+			// 文件名称，文件对象
+			console.log( files[i] )
+			formData.append( fileName, 1 );
+		}
+
+		var xhr = new XMLHttpRequest();
+		xhr.onload = function() {
+		    console.log("上传成功！");
+		    console.log( JSON.parse( xhr.response).msg );
+		}
+		xhr.open("POST", "http://127.0.1:1995/", true);
+
+		// 发送表单数据
+		xhr.send(formData);
+	}*/
+
+var inputfile = $('.addFile')[0]
+	inputfile.onchange = function(e){
+		let files = this.files
+		
+		let arr = [];
+		let name = '';
+		/**
+		 * FileReader接口的方法
+		 */
+		// readAsBinaryString	file	将文件读取为二进制编码
+		// readAsText	file,[encoding]	将文件读取为文本
+		// readAsDataURL	file	将文件读取为DataURL
+		// abort	(none)	终端读取操作
+
+		/**
+		 * FileReader接口事件
+		 */
+		 // onabort	中断
+		 // onerror	出错
+		 // onloadstart	开始
+		 // onprogress	正在读取
+		 // onload	成功读取
+		// onloadend	读取完成，无论成功失败
+		for(let i=0, len=files.length, fileName = files[i].name; i<len; i++){
+			//console.log( files[i] )
+			let reader = new FileReader();
+			name = files[i].name;
+			reader.readAsDataURL( files[i] )
+			reader.onload = (e)=>{
+				let result = e.target.result.replace(/data\:image\/\w.+;base64,/, '')
+				arr.push( {path: result} )
+				$.ajax({
+					type: 'post',
+					url: 'http://127.0.1:1995/',
+					dataType: 'json',
+					data: {
+						suju: result,
+						name: name
+					},
+					success: (res)=>{
+						console.log( res.msg )
+					},
+					error: (err)=>{
+						console.log(err )
+					}
+				})
+			}
+		}
+		
+	}
+		
+})
+</script>
+</body>
+</html>
