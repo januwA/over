@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<link href="https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.css" rel="stylesheet">
+</head>
+<body>
+<div class="box">
+	<label for="ttt" class="btn btn-primary">up file</label>
+	<input id="ttt" type="file" name="" accept="images/png" multiple="" style="display: none">
+</div>
+<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript">
+	/**
+	 * @description [图片超过200万像素无法绘制到canvas上，调用drawImage的时候不会报错，但是你用toDataURL获取图片数据的时候获取到的是空的图片数据]
+	 *@description [canvas的大小有限制，如果canvas的大小大于大概五百万像素（即宽高乘积）的时候，不仅图片画不出来，其他什么东西也都是画不出来的。]
+	 *@description [瓦片绘制]
+	 *@description [canvas的toDataURL是只能压缩jpg的，当用户上传的图片是png的话，就需要转成 jpg,用canvas.toDataURL("image/jpeg", 0.1) ， 类型统一设成jpeg]
+	 *@description [如果是png转jpg，绘制到canvas上的时候，canvas存在透明区域的话，当转成jpg的时候透明区域会变成黑色，因为 canvas的透明像素默认为rgba(0,0,0,0)，所以转成jpg就变成rgba(0,0,0,1)了，也就是透明背景会变成了黑色。解决办法就 是绘制之前在canvas上铺一层白色的底色。]
+	 *
+	 * 1)获取用户上传的图片 获取base64
+	 * 2）数据传入img对象，在将img绘制在canvas上，调用canvas.toDataURL对图片进行压缩
+	 * 3）获取到压缩后的base64格式图片数据
+	 */
+	
+	let name = ''; // 
+	let maxSize = 200; //上传图片最大kb
+	$('#ttt')[0].onchange = function(){
+		let files = this.files;
+		for(let i=0; i<files.length; i++){
+			name = files[i].name;
+			let reader = new FileReader();
+			reader.readAsDataURL( files[i] );
+			reader.onload = function(e){
+
+				let result = e.target.result;
+				let img = new Image();
+				img.src = result;
+				
+				let imgInfo = {
+					name: name,
+					size: ~~(e.total / 1024),
+				};
+
+				if( imgInfo.size <= maxSize ){
+					console.log( imgInfo.size + ' 图片小于 200kb直接上传');
+
+					upLoad(result);
+					return;
+				}
+
+				// 图片加载完毕 再上传
+				if( img.complete ){
+					next()
+				}else {
+					img.onload = next
+				}
+
+				function next() {
+					let data = compress(img);
+					 upLoad(data);
+					 img = null
+				}			
+			}
+		}
+	};
+
+	function compress(img){
+		let canvas =  document.createElement('canvas'); 
+		let ctx = canvas.getContext('2d');
+
+		let tCanvas =  document.createElement('canvas');
+        let tctx = tCanvas.getContext('2d'); 
+		console.log('图片大于 200kb 进行压缩');
+
+		var width =  img.width /2;
+		var height= img.height /2;
+         //如果图片大于四百万像素，计算压缩比并将大小压至400万以下
+         var ratio;
+         if ((ratio = width * height / 4000000)>1) {
+	            ratio = Math.sqrt(ratio);
+	            width /= ratio;
+	            height /= ratio;
+	        }else {
+	            ratio = 1;
+	        }
+
+       	canvas.width = width;
+        canvas.height = height;
+
+        // 铺底白色
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+         /*//如果图片像素大于50万则使用瓦片绘制
+         let count = '';
+         if( (count = width * height / 500000)>1 ){
+         	count = ~~(Math.sqrt(count) +1); // 切成多少片
+         	
+         	//  计算每块瓦片的宽和高
+         	let nw = ~~(width / count);
+            let nh = ~~(height / count);
+
+            // drawImage（img,x,y）在画布上定义图像
+            // drawImage（img,x,y,width,height） 定义宽高
+            // context.drawImage(img,sx,sy,swidth,sheight,x,y,width,height); 在画布上定位被剪切的部分
+              for (var i = 0; i < count; i++) {
+                for (var j = 0; j < count; j++) {
+             	 	 tctx.drawImage(img, i * nw * ratio, j * nh * ratio, nw * ratio, nh * ratio, 0, 0, nw, nh);
+
+                    ctx.drawImage(tCanvas, i * nw, j * nh, nw, nh);
+             	 }
+             }
+         }else{ // 小于50w像素直接绘制
+         	ctx.drawImage(img, 0, 0, width, height);
+         }*/
+          //进行 0.2 压缩
+         ctx.drawImage(img, 0, 0,width, height );
+        let ndata = canvas.toDataURL("image/jpeg", 0.5);
+        tCanvas.width = tCanvas.height = canvas.width = canvas.height = 0;
+        return ndata;
+	}
+
+	function upLoad(result){
+		console.log('ajax 上传')
+		 $.ajax({
+            type: 'post',
+            url: 'http://localhost:1995/',
+            dataType: 'json',
+            data: {
+                suju: result
+            },
+            success: (res) => {
+            	// console.log( res.msg)
+                var img = document.createElement("img");
+                img.setAttribute("src", res.msg );
+               $('body').append( img )
+            },
+            error: (err) =>{
+                console.log( err.status )
+            }
+          })
+	}
+</script>
+</body>
+</html>
