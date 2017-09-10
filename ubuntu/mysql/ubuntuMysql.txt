@@ -1,0 +1,22 @@
+修改mysql 密码
+mysql> SET PASSWORD FOR 'root'@'localhost' = PASSWORD('newpass');
+mysql -u root -p  登陆mysql
+exit; \q  退出mysql
+启动：service mysql start
+停止：service mysql stop
+重启：service mysql restart
+(用大写)
+root@ubuntu:/# mysql -u root -p --prompt ajanuw  修改mysql的提示符--prompt ajanuw^
+进入mysql后修改：PROMPT mysql>  
+select now();当前时间
+select user();当前登陆mysql用户
+select version();当前mysql版本
+创建数据库： create database test;
+查看总数据库： show databases;
+show warnings; 查看上次错误信息
+create database db-name character set utf8; 创建数据库的时候创建数据库的编码格式为utf8不然为默认的编码格式。
+show create database db-name;查看创建db-name数据库时用了那些命令
+alter databse db-name character set utf8;在创建完数据库后要更改数据库的编码格式
+drop database db-name;删除数据库
+
+

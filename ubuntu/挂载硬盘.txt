@@ -1,0 +1,56 @@
+
+MBR分区模式
+MBR分区模式：主分区不超过4个 单分区最大2TB
+1eb = 1024pb, 1pb = 1024tb, 1tb = 1024gb
+需要工具  fdisk
+
+	fdisk -l 查看当前所有的 磁盘：
+		Disk /dev/sdb: 5 GiB, 5368709120 bytes, 10485760 sectors
+		Disk /dev/sda: 60 GiB, 64424509440 bytes, 125829120 sectors
+	：进入分区模式
+		： fdisk /dev/sdb
+ 进入待命模式 输入m查看帮助
+	n 创建分区
+		p主分区  e扩张分区
+
+删除分区 Command (m for help): d
+
+写入做好的分区 Command (m for help): w
+
+
+gpT分区（常用方便）
+	工具parted
+	(parted) select /dev/sdb  :切换操作磁盘
+	(parted) mklabel msdos :添加MBR分区
+	(parted) mklabel gpt  :添加GPT分区
+	(parted) print  查看分区信息
+
+	parted) mkpart  添加分区
+	(parted) mkpart ajanuw02 1000 2000  【添加命令】 【硬盘名】 【重1000m开始】 【2000m结束】 
+	print 查看添加完成
+Number  Start   End     Size   File system  Name      Flags
+ 1      1049kB  1000MB  999MB  ext2         ajanuw
+ 2      1000MB  2000MB  999MB               ajanuw02
+
+(parted) rm 2 :删除编号为2 的分区 
+(parted) un GB  ：分空间时默认就为gb了 不是m
+ 
+
+格式化磁盘 
+	mkfs
+	root@ubuntu:/# mkfs.ext3 /dev/sdb1
+
+ 挂载磁盘  默认挂载目录 mnt /
+	root@ubuntu:/# mount /dev/sdb1 /mnt/ajanuw/   :mount挂载命令  挂在硬盘路径
+	挂载目录路径
+root@ubuntu:/# umount /mnt/ajanuw/   ：：卸载挂载点
+
+：：系统重启后挂载失效，如果要永久挂载更改配置文件
+root@ubuntu:/mnt# vim + /etc/fstab
+在最后一行添加 路径
+/dev/fd0        /media/floppy0  auto    rw,user,noauto,exec,utf8 0       0
+/dev/sdb1        /mnt/ajanuw  wxt3   defaults 0      0
+
+
+
+

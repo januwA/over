@@ -1,0 +1,14 @@
+安装::apt-get install git
+下载::git clone {git地址}
+git status 查看新添加了什么文件
+git add 添加到本地文件
+git commit上传
+git push 推送
+
+vim。
+
+vim ./.git/config
+
+在config文件里core字段中加入
+
+editor=vim

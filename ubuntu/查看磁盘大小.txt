@@ -1,0 +1,6 @@
+  df -h 可以查看磁盘大小 用1024 表示 kb, mb ,m ,g
+  df -H 可以查看磁盘大小 用1000 表示 kb, mb ,m ,g
+ df -T显示文件类型
+ du -s /home/ajanuw/   指定查看文件大小 默认kb
+ du -sb /home/ajanuw/   指定查看文件大小用b大小 可以用m
+ du -sh /home/ajanuw/   指定查看文件大小  常用h
