@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+</head>
+<body>
+<input type="file" class="a" accept="image/*" multiple>
+<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript">
+	let inp = $('.a')
+
+	inp.on('change', function(){
+		let _self = $(this)[0];
+		let files = _self.files
+		for(let i=0; i<files.length; i++){
+			 let reader = new FileReader();
+			 reader.readAsDataURL( files[i] );
+			  reader.onload = (e)=>{
+			  	 let result = e.target.result.replace(/data\:image\/\w.+;base64,/, '')
+
+			  	 $.ajax({
+                    type: 'post',
+                    url: 'http://localhost:1995/',
+                    dataType: 'json',
+                    data: {
+                        suju: result
+                    },
+                    success: (res) => {
+ 
+                        var img = document.createElement("img");
+                        img.setAttribute("src", res.msg );
+                       $('body').append( img )
+                    },
+                    error: (err) =>{
+                        console.log( err.status )
+                    }
+                })
+
+
+			  }
+		}
+	})
+</script>
+</body>
+</html>
