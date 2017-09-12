@@ -23,26 +23,28 @@
 </style>
 </head>
 <body>
+<input type="file" name="" id="upfile">
+
 <div class="span12">
+
 <div class="jc-demo-box">
-	<img src="./img/1.jpg" id="target" alt="[Jcrop Example]" width="300" />
+	<img src="4.jpg" id="target" alt="[Jcrop Example]" width="300"/>
+
 	<div id="preview-pane">
     	<div class="preview-container">
      	 <img src="" class="jcrop-preview" alt="Preview" id="a"/>
    	 	</div>
  	 </div>
-
 </div>
 </div>
-
-
 <script src="./Jcrop-0.9.12/js/jquery.min.js"></script>
 <script src="./Jcrop-0.9.12/js/jquery.Jcrop.js""></script>
 <script type="text/javascript">
   $(function($){
-
-    let a = $('#a')
-    let ti = $('#target')
+    let file = $('#upfile');
+    let a = $('#a');
+    let ti = $('#target');
+    var bounds;
     var jcrop_api,
         boundx,
         boundy,
@@ -50,38 +52,51 @@
         $preview = $('#preview-pane'),
         $pcnt = $('#preview-pane .preview-container'),
         $pimg = $('#preview-pane .preview-container img'),
-
         xsize = $pcnt.width(),
         ysize = $pcnt.height();
-    
+
+    file.on('change', function(e){
+      let _self = $(this)[0];
+      let files = _self.files[0];
+      let reader = new FileReader();
+      reader.readAsDataURL( files );
+      reader.onload = function(e){
+      let result = e.target.result;
+      // 通过上传图片改变 图片
+      $('.jc-demo-box img').each(function(i , item){
+          item.src = result;
+      });
+      }
+    });
+
     $('#target').Jcrop({
       onChange: updatePreview,
       onSelect: updatePreview,
       aspectRatio: xsize / ysize,
-      onDblClick: function() {
-
-      	console.log( ti.attr('src') )
-      	a.attr('src', ti.attr('src') )
-      	console.log('实际尺寸 '+ JSON.stringify( this.tellSelect()) )
-      	console.log('界面尺寸 '+ JSON.stringify( this.tellScaled()) )
+      onDblClick: function(c) {
+        // 双击旋转框截取图片
+      	a.attr('src', ti.attr('src') );
+        let data = saveImg(ti, this.tellScaled() );
+        let img = new Image();
+        img.src= data;
+        document.body.appendChild( img);
       }
     },function(){
-   	  this.animateTo([100,100,400,300]); // 页面加载自动弹出 截图框
-      var bounds = this.getBounds();
+   	  this.animateTo([0,0,100,100]); // 页面加载自动弹出 截图框
+      bounds = this.getBounds();
       boundx = bounds[0];
       boundy = bounds[1];
       jcrop_api = this;
       $preview.appendTo(jcrop_api.ui.holder);
     });
 
-    function updatePreview(c)
-    {
-      a.attr('src', ti.attr('src') )
-      if (parseInt(c.w) > 0)
-      {
-        var rx = xsize / c.w;
-        var ry = ysize / c.h;
 
+    function updatePreview(c){
+      // 右边预览图片相关代码
+      a.attr('src', ti.attr('src') );
+      if (parseInt(c.w) > 0){
+        let rx = xsize / c.w;
+        let ry = ysize / c.h;
         $pimg.css({
           width: Math.round(rx * boundx) + 'px',
           height: Math.round(ry * boundy) + 'px',
@@ -91,6 +106,40 @@
       }
     };
 
+
+function saveImg(img,json){
+  let canvas2 =  document.createElement('canvas'); 
+  let ctx2 = canvas2.getContext('2d');
+  canvas2.width = img.width();
+  canvas2.height = img.height();
+  ctx2.drawImage(img[0], 0 ,0, canvas2.width, canvas2.height);
+
+    let canvas =  document.createElement('canvas'); 
+    let ctx = canvas.getContext('2d');
+
+    canvas.width = json.w;
+    canvas.height = json.h;
+
+
+    // 铺底白色
+    ctx.fillStyle = "red";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.drawImage(canvas2, json.x ,json.y , json.w, json.h, 0,0, canvas.width, canvas.height);
+    try {
+      let data =  canvas.toDataURL();
+      console.log( data );
+      return data;
+    }catch(err){
+      console.log( err);
+    }
+    
+    document.body.appendChild( canvas);
+    
+}
+
+
+/*jq end*/
   });
 
 
