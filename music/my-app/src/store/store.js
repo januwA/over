@@ -2,13 +2,24 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
 let state = {
-    imgs: ''
+    imgs: []
 }
 
 let mutations = {
     getImgs (state, data) {
-        Vue.set(state, 'imgs', data.data.v_hot);
-        console.log( state.imgs)
+        console.log(data.data.v_hot );
+        data.data.v_hot.map( (i, item) => {
+            // console.log( i.content_id, i.cover )
+            state.imgs.push({
+                src: i.cover,
+                link: 'https://y.qq.com/n/yqq/playlist/'+ i.content_id +'.html'
+            });
+        });
+       /* Vue.set(state, 'imgs',{
+            src: data.data.v_hot.cover,
+            link: 'https://y.qq.com/n/yqq/playlist/'+ data.data.v_hot.content_id +'.html'
+        } );
+        console.log( state.imgs)*/
     } 
 }
 let actions ={
@@ -21,7 +32,7 @@ let actions ={
             },
             success: (res) => {
                 let recomPlaylist = res.recomPlaylist;// 获取推荐列表
-                // console.log( recomPlaylist )
+               //  console.log( res )
                 commit('getImgs', recomPlaylist);
             },
             error: (err) =>{
@@ -35,6 +46,7 @@ let getters = {
     imgs (state) {
         return state.imgs
     }
+    
 }
 
 export default new Vuex.Store({
