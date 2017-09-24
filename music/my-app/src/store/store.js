@@ -2,24 +2,25 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
 let state = {
-    imgs: []
+    swiperImgs: [], // swiper数据
+    hotSongs: [], // 热门歌单数据
 }
 
 let mutations = {
     getImgs (state, data) {
-        console.log(data.data.v_hot );
         data.data.v_hot.map( (i, item) => {
-            // console.log( i.content_id, i.cover )
-            state.imgs.push({
+            state.swiperImgs.push({
                 src: i.cover,
                 link: 'https://y.qq.com/n/yqq/playlist/'+ i.content_id +'.html'
             });
+            state.hotSongs.push({
+                src: i.cover,
+                link: 'https://y.qq.com/n/yqq/playlist/'+ i.content_id +'.html',
+                title: i.title,
+                listen_num: i.listen_num
+            });
         });
-       /* Vue.set(state, 'imgs',{
-            src: data.data.v_hot.cover,
-            link: 'https://y.qq.com/n/yqq/playlist/'+ data.data.v_hot.content_id +'.html'
-        } );
-        console.log( state.imgs)*/
+        // console.log(data )
     } 
 }
 let actions ={
@@ -43,8 +44,11 @@ let actions ={
 }
 
 let getters = {
-    imgs (state) {
-        return state.imgs
+    swiperImgs (state) {
+        return state.swiperImgs
+    },
+    hotSongs (state) {
+        return state.hotSongs
     }
     
 }

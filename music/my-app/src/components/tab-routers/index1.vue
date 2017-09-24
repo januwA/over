@@ -3,7 +3,7 @@
        <div class="swiper-box bg-danger">
             <div class="swiper-container">
                 <div class="swiper-wrapper">
-                  <div v-for="(item, index) of imgs" class="swiper-slide" v-if="index < 6">
+                  <div v-for="(item, index) of swiperImgs" class="swiper-slide" v-if="index < 6">
                       <a :href="item.link">
                           <img  :src="item.src" width="100%" height="100%">
                       </a>
@@ -18,6 +18,18 @@
               <small class="text-warning">热门歌单推荐</small>
           </div>
       </div>
+       <!--热门歌单列表-->
+        <a class="row p-2" v-for="(item, index) of hotSongs" :href="item.link">
+           <!-- 图片-->
+            <div class="col-4 align-self-center">
+                <img :src="item.src" class="img-fluid" />
+            </div>
+            <!-- title-->
+            <div class="col pl-0">
+                <span class='text-white h6' v-html="item.title"></span>
+                <p class='text-muted'>播放量：{{(item.listen_num / 10000).toFixed(1)}}万</p>
+            </div>
+        </a>
 </div>
 </template>
 
@@ -32,7 +44,8 @@
             }
         },
         computed: mapGetters([
-            'imgs'
+            'swiperImgs',
+            'hotSongs'
         ]),
         methods: mapActions([
             'getImgs'
