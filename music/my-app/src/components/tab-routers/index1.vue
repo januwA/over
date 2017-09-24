@@ -3,7 +3,11 @@
        <div class="swiper-box bg-danger">
             <div class="swiper-container">
                 <div class="swiper-wrapper">
-                    <img v-for="(item, index) of imgs" v-if="index > 6" :src=" item.cover" :alt="item.cover" class="swiper-slide img-fluid">
+                  <div v-for="(item, index) of imgs" class="swiper-slide" v-if="index < 6">
+                      <a :href="item.link">
+                          <img  :src="item.src" width="100%" height="100%">
+                      </a>
+                  </div>
                 </div>
                 <!-- 如果需要分页器 -->
                 <div class="swiper-pagination"></div>
@@ -39,13 +43,12 @@
         },
         mounted: function () {
               var mySwiper = new Swiper ('.swiper-container', {
-                loop: true,
-                pagination: '.swiper-pagination',
-                paginationClickable :true,
-                autoplay : 2000,
-                autoplayDisableOnInteraction : false,
                 observer:true,
                 observeParents:true,
+                loop: true,
+                pagination: '.swiper-pagination',
+                autoplay : 2000,
+                autoplayDisableOnInteraction : false,
               })   
         }
         
