@@ -1,7 +1,12 @@
 <template>
   <div id="app">
+  
     <Myhead></Myhead>
     <Mytab></Mytab>
+    
+    <keep-alive>
+        <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 

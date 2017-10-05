@@ -1,17 +1,23 @@
 <template>
     <div class="">
-        排行
     </div>
 </template>
 
 
 <script>
     export default {
-        data () {
-            return {
-                
-            }
+       data () {
+           return {
+           }
+       },
+        components: {
+         
+        },
+        mounted: function () {
+            
         }
     }
 </script>
-<style scoped=""></style>
+<style scoped>
+
+</style>

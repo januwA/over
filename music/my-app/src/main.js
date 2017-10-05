@@ -7,6 +7,11 @@ import '../static/css/bootstrap.css'
 import store from './store/store.js'
 import '../static/css/swiper.min.css'
 
+import VueLazyload from 'vue-lazyload'
+
+Vue.use(VueLazyload, {
+   loading: require('./assets/lazy-load.png') 
+});
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
