@@ -1,19 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import BScroll from 'better-scroll'
-Vue.use(Vuex)
 
-let state = {
-    that: null,
-    touch: {},
-    scrollY: -1,
-    currentIndex: 0,
-    diff: -1,
-    listHeight: [],
-    swiperImgs: [], // swiper数据
-    hotSongs: [], // 热门歌单数据 index1
-    singerLists: [], // 歌手列表 index2
-}
+Vue.use(Vuex)
+import state from './state.js'
 
 let mutations = {
     callThis (state, that) {
@@ -59,6 +48,11 @@ let mutations = {
         }
         // down
         state.currentIndex = listH.length - 2
+    },
+    toDetail(state,data){
+        var {data} = data
+        // https://y.qq.com/n/yqq/song/'+ songid +'_num.html
+        console.log( data )
     }
 }
 let actions ={
@@ -202,6 +196,41 @@ let actions ={
         }
         // console.log(state.listHeight  )
         commit('Escroll');
+    },
+    toDetail ({commit},item){
+        var url = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg'
+        
+        $.ajax({
+            url: url,
+            dataType: 'jsonp',
+            jsonpCallback: 'MusicJsonCallbacksinger_track',
+            data: {
+                'g_tk':'5381',
+                'jsonpCallback':'MusicJsonCallbacksinger_track',
+                'format':'jsonp',
+                'inCharset':'utf8',
+                'outCharset':'utf-8',
+                'platform':'yqq',
+                'singermid': item.id,
+                'order':'listen',
+                'begin':'0',
+                'num':'30',
+                'songstatus':'1',
+            },
+            success: (res) => {
+                commit('toDetail',res);
+            },
+            error:(err)=>{
+            
+            }
+        });
+        let self = state.that;
+        item.id 
+            ? self.$router.push({ path: '/index2/'+ item.id }) 
+            : self.$router.push({ path: '/index2' }) 
+    },
+    closeDetail ({commit}) {
+        window.history.go(-1);
     }
 }
 

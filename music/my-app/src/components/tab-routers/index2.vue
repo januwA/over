@@ -15,7 +15,10 @@
                         <h5 class="col text-dark bg-secondary py-1 mb-0">{{group.title}}</h5>
                         <div class="w-100"></div>
                         <div class="col">
-                            <div class="row py-2" v-for="(item,index) of group.items">
+                            <div 
+                                @click="toDetail(item)"
+                                class="row py-2"
+                                v-for="(item,index) of group.items">
                                 <div class="col-3 align-self-center">
                                     <img class="img-fluid rounded-circle" v-lazy="item.src" alt="">
                                 </div>
@@ -50,8 +53,13 @@
                 </ul>
             </div>
         </scroll>
-        
     </div>
+       <transition
+        enter-active-class="lightSpeedIn" 
+        leave-active-class="lightSpeedOut"
+       >
+        <router-view></router-view>
+        </transition>
     </div>
 </template>
 
@@ -77,7 +85,8 @@
                 'callThis',
                 'getSingers',
                 'touch_Rbar',
-                'touchmove_Rbar'
+                'touchmove_Rbar',
+                 'toDetail'
              ])
         },
         watch:{

@@ -3,9 +3,11 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import '../static/css/bootstrap.css'
+
 import store from './store/store.js'
 import '../static/css/swiper.min.css'
+import '../static/css/bootstrap.css'
+import '../static/css/animate.css'
 
 import VueLazyload from 'vue-lazyload'
 
