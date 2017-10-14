@@ -52,6 +52,10 @@ let mutations = {
     toDetail(state,data){
         var {data} = data
         // https://y.qq.com/n/yqq/song/'+ songid +'_num.html
+        // 
+        // https://y.gtimg.cn/music/photo_new/T002R300x300M00000 3RMaRI1iFoYd.jpg
+        // https://y.gtimg.cn/music/photo_new/T002R300x300M00000 2Neh8l0uciQZ.jpg
+        // https://y.gtimg.cn/music/photo_new/T002R300x300M00000 2eFUFm2XYZ7z.jpg
         console.log( data )
     }
 }
