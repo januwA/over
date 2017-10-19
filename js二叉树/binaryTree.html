@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+	<meta charset="utf-8">
+	<title>文档标题</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="keywords" content="your keywords">
+	<meta name="description" content="your description">
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+</head>
+<body>
+	<script>
+		/**
+		 * 排序二叉树
+		 * 	特性  
+		 *  左节点小于父节点
+		 *  右节点大于父节点
+		 *  没有父节点的是 根节点
+		 *  没有子节点的是 叶子节点
+		 *  其他是 中间节点
+		 */
+		
+		/**
+		 * 创建二叉树 BinatyTree()
+		 *  创建节点 Node()
+		 *  插入节点 insert()
+		 *  节点排序的方法 insertNode()
+		 */
+		
+		/**
+		 *  遍历 二叉树
+		 *  先序遍历 首先访问根，再先序遍历左（右）子树，最后先序遍历右（左）子树
+		 *  中序遍历 首先中序遍历左（右）子树，再访问根，最后中序遍历右（左）子树
+		 *  后序遍历 首先后序遍历左（右）子树，再后序遍历右（左）子树，最后访问根
+		 */
+		
+		function BinaryTree() {
+			var Node = function(key ) {
+				this.key = key; // 节点的值
+				this.left = null; // 左节点的值
+				this.right = null; //有节点的值
+			}
+			var root = null; // 根节点
+
+			var insertNode = function(node, newNode){
+				if(newNode.key < node.key){
+					// 小于根节点 成为左节点
+					if( node.left === null ){ // 右节点为空者赋值,否则递归下去
+						node.left = newNode;
+					} else { 
+						insertNode(node.left, newNode);
+					}
+				}else{
+					// 大于根节点 成为右节点
+					if( node.right === null ){
+						node.right = newNode;
+					}else {
+						insertNode(node.right, newNode );
+					}
+				}
+			}
+			this.insert = function(key) {
+				var newNode = new Node(key);
+				if(root === null){
+					// 根节点为空的话，就创建根节点
+					root = newNode;
+				} else {
+					// 更具排序 创建子节点
+					insertNode(root, newNode);
+				}
+			}
+			var inOrderTraverseNodeLeft = function (node, next) {
+				if( node !== null ){
+					inOrderTraverseNodeLeft(node.left, next); // 从左开始
+					next( node.key ); // 
+					inOrderTraverseNodeLeft(node.right, next); // 
+				}
+			}
+			var inOrderTraverseNodeRight = function (node, next) {
+				if( node !== null ){
+					inOrderTraverseNodeRight(node.right, next); // 从左开始
+					next( node.key ); // 
+					inOrderTraverseNodeRight(node.left, next); // 
+				}
+			}
+
+			this.inOrderTraverse = function (isRL, next){ // 中序遍历
+				// console.log( isRL )
+				// 通过传递参数来控制机排序 默认从左到右
+				if( isRL === 'l'){
+					inOrderTraverseNodeLeft( root, next);
+				}else if( isRL === 'r' ){
+					inOrderTraverseNodeRight( root, next);
+				}else{
+					inOrderTraverseNodeLeft( root, isRL);
+				}
+			}
+		}
+		var arr = [1,2,3,4,6,0]
+
+		var binaryTree =  new BinaryTree();
+		arr.forEach( function(el){
+			 binaryTree.insert(el)
+		});
+
+		var x = [];
+		binaryTree.inOrderTraverse('r',function(key){
+			// 中序遍历
+			x.push( key )
+		});
+		console.log( x )
+	</script>
+</body>
+</html>
