@@ -47,16 +47,28 @@ let mutations = {
                 }
         }
         // down
-        state.currentIndex = listH.length - 2
+        state.currentIndex = listH.length - 2;
     },
     toDetail(state,data){
-        var {data} = data
-        // https://y.qq.com/n/yqq/song/'+ songid +'_num.html
-        // 
-        // https://y.gtimg.cn/music/photo_new/T002R300x300M00000 3RMaRI1iFoYd.jpg
-        // https://y.gtimg.cn/music/photo_new/T002R300x300M00000 2Neh8l0uciQZ.jpg
-        // https://y.gtimg.cn/music/photo_new/T002R300x300M00000 2eFUFm2XYZ7z.jpg
-        console.log( data )
+        var self = this.that;
+        /*var {data:{list} } = data;
+        var detailData = state.detailData.slice();
+        list.forEach(function(item){
+            var{ musicData } = item;
+            detailData.push(
+            {
+                id: musicData.songid,
+                mid: musicData.songmid,
+                singer: musicData.singer[0],
+                name: musicData.songname,
+                album: musicData.albumname,
+                dur: musicData.interval,
+                img: 'https://y.gtimg.cn/music/photo_new/T001R300x300M000'+musicData.singer[0].mid+'.jpg',
+                url: `http://ws.stream.qqmusic.qq.com/${musicData.congid}.m4a?fromtag=46`
+            }
+            );
+        });*/
+        Vue.set(state,'detailData',data);
     }
 }
 let actions ={
@@ -202,6 +214,10 @@ let actions ={
         commit('Escroll');
     },
     toDetail ({commit},item){
+        if(!item.id){
+            self.$router.push({ path: '/index2/'}) 
+           return;
+           }
         var url = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg'
         
         $.ajax({
@@ -225,16 +241,15 @@ let actions ={
                 commit('toDetail',res);
             },
             error:(err)=>{
-            
+                console.log( err.status )
             }
         });
         let self = state.that;
-        item.id 
-            ? self.$router.push({ path: '/index2/'+ item.id }) 
-            : self.$router.push({ path: '/index2' }) 
+         self.$router.push({ path: '/index2/'+ item.name }) 
     },
     closeDetail ({commit}) {
-        window.history.go(-1);
+        let self = state.that;
+        self.$router.back();
     }
 }
 
@@ -267,6 +282,10 @@ let getters = {
     },
     diff (state) {
         return state.diff;
+    },
+    detailData(state){
+        console.log(state.detailData )
+        return state.detailData;
     }
 }
 

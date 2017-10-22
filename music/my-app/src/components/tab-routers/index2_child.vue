@@ -1,26 +1,24 @@
 <template>
     <div class="animated fixed-detai bg-white">
-        <div class="container">
-            <div class="row py-2 text-center">
-                <div class="col-2" @click="closeDetail"><</div>
-                <div class="col">周杰伦</div>
-            </div>
-        </div>
+            <detailList
+                :data="detailData"
+            ></detailList>
     </div>
 </template>
 
 <script>
     import {mapGetters, mapActions} from 'vuex'
+    import detailList from '@/base/detailList.vue'
     export default {
-        data () {
-            return {
-                
-            }
+        computed:{
+            ...mapGetters([
+                'detailData'
+            ]),
         },
-        methods:{
-            ...mapActions([
-                'closeDetail'
-            ])
+        components:{
+            detailList
+        },
+        mounted(){
         }
     }
 </script>
