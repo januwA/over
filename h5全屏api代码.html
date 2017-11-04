@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="utf-8">
+    <title>ajanuw</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="ajanuw">
+    <meta name="description" content="ajanuw">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    <style>
+
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="row" id="videoBOX">
+        <div class="col-6">
+            <div>
+                <video class="embed-responsive">
+                    <source src="http://ystsj.net:80/ybwsc/upload/2017/10/19//BACKEND/prodImgs/CC7B2AED23BD4D18A1978CB6D5143AE1.mp4" type="video/mp4" />
+                </video>
+            </div>
+        </div>
+        <div class="col-6">
+            <video class="embed-responsive">
+                <source src="http://ystsj.net:80/ybwsc/upload/2017/8/18//BACKEND/prodImgs/461F2D8BEEEC49B49669EF73A55F5E37.mp4" type="video/mp4" />
+            </video>
+        </div>
+        <div class="col-6">
+            <video class="embed-responsive">
+                <source src="http://ystsj.net:80/ybwsc/upload/2017/8/18//BACKEND/prodImgs/578F4E6CBE674B738460E65F6A093B8B.mp4" type="video/mp4" />
+            </video>
+        </div>
+        <div class="col-6">
+            <video class="embed-responsive">
+                <source src="http://ystsj.net:80/ybwsc/upload/2017/8/17//BACKEND/prodImgs/B17442525E9B4A808CCA721A640D6B5C.mp4" type="video/mp4" />
+            </video>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row" id="imgBOX">
+        <div class="col-6">
+            <img src="http://www.zhlzw.com/UploadFiles/Article_UploadFiles/201204/20120412123914329.jpg" class="img-fluid w-75">
+        </div>
+        <div class="col-6">
+            <img src="http://f.hiphotos.baidu.com/image/pic/item/3ac79f3df8dcd1008742b1cc788b4710b8122f04.jpg" class="img-fluid w-75">
+        </div>
+        <div class="col-6">
+            <img src="http://h.hiphotos.baidu.com/image/pic/item/9f510fb30f2442a7ee066f14db43ad4bd1130272.jpg" class="img-fluid w-75">
+        </div>
+        <div class="col-6">
+            <img src="http://pic21.nipic.com/20120511/8126152_233511681000_2.jpg" class="img-fluid w-75">
+        </div>
+        <div class="col-6">
+            <img src="http://www.zhlzw.com/UploadFiles/Article_UploadFiles/201204/20120412123929231.jpg" class="img-fluid w-75">
+        </div>
+    </div>
+</div>
+
+
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+
+    $('#videoBOX').click(function(e) {
+        if (e.target && e.target.nodeName === 'VIDEO') {
+            var video = e.target;
+            if ( !fullScreen(video) ) {
+                alert('你的浏览器不支持全屏！')
+                return null
+            }
+
+            $(document).on('MSFullscreenChange webkitfullscreenchange mozfullscreenchange fullscreenchange', function() {
+
+                if (isElementFullScreen('video')) {
+                    console.log('plary ...')
+                    // 有全屏元素 && 全屏元素为video的话就播放
+                    video.play();
+                } else {
+                    console.log('pause ...')
+                    video.pause();
+                }
+
+            });
+        }
+    })
+
+
+    function fullScreen(ele) {
+        {/*
+         *   document.mozFullScreenEnabled || document.webkitFullscreenEnabled
+         *   判断浏览器是否支持全屏模式 && 让一个元素全屏化
+         *   返回 true or false
+         */}
+        
+        /*
+        * fullscreenEnabled 是否支持全屏
+        * openFullScreen  打开全屏
+         */
+
+        var fullscreenEnabled = document.fullscreenEnabled ||
+                                document.webkitFullscreenEnabled ||
+                                document.mozFullScreenEnabled ||
+                                document.msFullscreenEnabled;
+
+        var openFullScreen = ele.requestFullscreen ||
+                                ele.webkitRequestFullscreen ||
+                                ele.mozRequestFullScreen ||
+                                ele.msRequestFullscreen ;
+                                
+         if(fullscreenEnabled ){
+            if( typeof openFullScreen === 'function'){
+                var fnName =  openFullScreen.name || openFullScreen.toString().match(/function\s*([^(]*)\(/)[1];
+
+                if( fnName.indexOf('webkit') !== -1 ){
+                    ele.webkitRequestFullscreen();
+                    return true
+                }else if( fnName.indexOf('moz') !== -1 ){
+                    ele.mozRequestFullScreen();
+                    return true
+                }
+                else if( fnName.indexOf('ms') !== -1 ){
+                    ele.msRequestFullscreen();
+                    return true
+                }else{
+                    ele.requestFullscreen();
+                    return true
+                }
+            }else{
+                return false
+            }
+            
+         }else{
+            return false;
+         }
+    }
+
+    function isFullScreen() {
+        /* isFullScreen()方法  当前页面是否全屏 返回true or false*/
+        var bIsFullScreen = document.fullScreen ||
+            document.mozFullScreen ||
+            document.webkitIsFullScreen;
+        return bIsFullScreen;
+    }
+
+    function isElementFullScreen(elementName) {
+        /*
+         *   isElementFullScreen(elementName) 方法
+         *   1) 判断当前页面有没有全屏的元素
+         *   2) 判断全屏元素是否为指定标签
+         *   3) 返回true or false
+         */
+        if (
+            document.webkitFullscreenElement && // 页面是否有全屏的元素
+            document.webkitFullscreenElement.nodeName === elementName.toUpperCase() // 获取全屏元素nodename
+            ||
+            document.mozFullScreenElement &&
+            document.mozFullScreenElement.nodeName === elementName.toUpperCase()
+            ||
+            document.msFullscreenElement &&
+            document.msFullscreenElement.nodeName === elementName.toUpperCase()
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    /*
+    * 总结 
+    * https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API 【文档地址】
+    * doc.fullscreen  返回当前页面是否全屏 返回：true or false
+    * doc.fullscreenEnabled  判断当前页面是否支持全屏化 返回：true or false
+    * doc.fullscreenElement  获取当前全屏化的元素 返回：dom
+    * onfullscreenchange  监听doc的 打开全屏 和 关闭全屏 事件
+    * doc.exitFullscreen()  让doc退出全屏 moz有点不一样mozCancelFullScreen()
+    * ele.requestFullscreen()  让指定element全屏化
+     */
+
+     // 图片放大
+     
+     $('#imgBOX').on('click',function(e){
+        
+        if (e.target && e.target.nodeName === 'IMG') {
+            var img = e.target;
+            if ( !fullScreen(img) ) {
+                alert('你的浏览器不支持全屏！')
+                return null
+            }
+        }
+     })
+    </script>
+</body>
+
+</html>
