@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.3/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+    .img-box, .box {
+        max-width: 1200px;
+        height: 220px;
+        border: 1px dashed black;
+    }
+
+    .img-box .img {
+        float: left;
+        width: 60px;
+    }
+    </style>
+</head>
+
+<body>
+    <!-- 点击上传 -->
+    <label class="btn btn-info" for="x">上传图片按钮</label>
+    <input 
+    	id="x" 
+    	type="file" 
+    	multiple="multiple" 
+    	accept="audio/mp3,video/mp4,image/png, image/jpeg, image/gif, image/jpg" 
+    	size="30" 
+    	style="display: none;">
+    <div class="img-box">
+    </div>
+
+    <hr />
+    <p id='testDrag' class="btn btn-danger" draggable="true" ondragstart="drag(event)">
+        hello world
+    </p>
+    <div class="box" ondrop="drop(event)" ondragover="allowDrop(event)">
+    </div>
+
+    <script>
+    /**
+    *	accept="image/*"
+    *	accept="image/png, image/jpeg, image/gif, image/jpg"
+    *	accept="audio/*,video/*,image/*"
+    8	multiple="multiple" 多文件上传
+    */
+    /**
+     *	h5 拖动 draggable="true"
+     */
+    function $(a) {
+        return document.querySelector(a)
+    }
+
+    /**********************************/
+
+    function allowDrop(ev) {
+    	ev.preventDefault();
+    }
+
+    function drag(ev) {
+    	ev.dataTransfer.setData("Text", ev.target.id);
+    }
+
+    function drop(ev) {
+    	ev.preventDefault();
+    	var data = ev.dataTransfer.getData("Text");
+    	ev.target.appendChild(document.getElementById(data));
+    }
+
+/**********************************/
+
+
+    let imgBox = $('.img-box'); 
+    let a = $('#x');
+    let imgs = [];
+    a.onchange = function() {
+        resFileValue(this, (database) => {
+            imgs.push(database )
+            createImgs(imgs)
+        })
+    }
+
+    window.onload = function() {
+        imgBox.ondragenter = ignoreDrag;
+        imgBox.ondragover = ignoreDrag;
+        imgBox.ondrop = imgDrop;
+    }
+
+    function ignoreDrag(e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+
+    function imgDrop(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        //取得拖进来的文件
+        var data = e.dataTransfer;
+        //将其传给真正的处理文件的函数
+
+        resFileValue(data, (dataBase) => {
+            imgs.push(dataBase)
+            createImgs(imgs)
+        })
+    }
+
+    /* 创建img元素函数 */
+    function createImgs (arr) {
+        let img = document.createElement('img')
+        img.src = arr[arr.length - 1]
+        imgBox.appendChild(img)
+    }
+
+     /* 把上传图片转成 database  */
+    function resFileValue (that, next){
+        var file = that.files;
+        for (let i = 0, len = file.length; i < len; i++) {
+            if (window.FileReader) {
+                var reader = new FileReader();
+                // readAsDataURL 处理图片关键方法
+                /*if(file[i].size < '6000' ){
+                	alert('你上传的图片小于了0.6kb'+'--'+'文件名：'+ file[i].name )
+                	continue;
+                }*/
+                reader.readAsDataURL(file[i]);
+                reader.onloadend = function(e) {
+                    next(e.target.result)
+                }
+            }
+        }
+    }
+    </script>
+</body>
+
+</html>
