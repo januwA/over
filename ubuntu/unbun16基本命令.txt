@@ -1,3 +1,6 @@
+../home/   这叫相对路劲
+/home/  这叫绝对路径
+
 系统目录
 / 根目录
 /bin 命令保存目录
@@ -17,7 +20,7 @@
 ========================================================
 
 1）  login进入，logout退出
-当进入页面后看到的 ajanuw@ubuntu:~$  
+当进入页面后看到的 ajanuw@ubuntu:~$
 当前登陆用户	ajanuw
 当前登陆主机名	ubuntu
 当前所在目录	~
@@ -45,17 +48,24 @@ r读4  w写2  x执行1
 >touch xxx.txt  创建一个空的文件
 
 >rm [-rf]  目录名或文件名   -rf 强制删除文件或目录
->cd 目录名  用于在目录间切换 // 【cd】进入更目录 【cd -】进入上一次目录【cd ..】进入上一级目录
+>rm -f *   // 删除当前文件夹下所有的文件
+>rm -rf *.txt  // 删除当前目录下 后缀名为 .txt的文件
+>rm -rf *.js *.py  // 删除当前目录下 后缀名为 .js和.py的文件
+>find /home/ajanuw/ -iname *.txt -exec rm -rf {} \;  // 查找了ajanuw/下的.txt文件然后删除掉
+>mv a/1.txt b/ && rm -rf a   // 把a下面的1.txt剪切到b下面去，这条命令执行成功才继续删除a目录
 
-tap键 可以命令补全和文件补全
+>cd 目录名  用于在目录间切换
+【cd】进入更目录 【cd -】进入上一次目录【cd ..】进入上一级目录
 
 >cp -a 目录或文件 目标目录   ;复制命令[-a]选项 两参数 把文件复制粘贴到那
 >mv 目录或文件 目标目录[/新名]  ;剪切文件或目录 剪切后可以更改文件名
+>mx xxx/* ./   // 把xxx目录下的文件全部 剪切当前目录
 >mv x.txt a.txt  也可以用于更改文件名
+>mv 1.txt 2.txt xxx/   // 把两个文件 同时剪切到 xxx/ 目录下面
 
 >ln [-s] 源文件 目标文件  ;创建硬链接【硬链接就是一模一样】，
-    -s 选项创建软链接 源文件要写相对路径 ln -s /home/ajanuw/x.txt ./  在当前目录下创建了一个软链接
-
+    -s 选项创建软链接 源文件要写绝对路径 ln -s /home/ajanuw/x.txt ./  在当前目录下创建了一个软链接
+注： 硬链接过来的文件，如果源文件被删除了，硬链接还在，软连接则会无法使用
 >cat x.txt   ;可直接打印文件内容
 
 ========================================================
@@ -73,7 +83,7 @@ tap键 可以命令补全和文件补全
 ========================================================
 
 4) 文件搜索命令
-	4.1)文件搜索命令 locate +文件名参数 ;  
+	4.1)文件搜索命令 locate +文件名参数 ;
 	特点：只能搜文件名，速度快，不能搜索新建文件，需要执行 >updatedb  ;更新数据库
 	>locate xx.txt
 	/home/ajanuw/xx.txt
@@ -84,9 +94,9 @@ tap键 可以命令补全和文件补全
 	4.2)搜索命令的命令 >whereis 和 >which , 不能用来搜文件
 	>whereis -b rm
 	rm: /bin/rm
->echo $PATH  ;是看环境变量 
+>echo $PATH  ;是看环境变量
 
-	4.2）find [搜索范围] [搜索条件]  ;搜索文件命令，功能多，速度慢
+	4.2）find [搜索范围] [搜索条件]  ;搜索文件和目录的命令，功能多，速度慢
 	>find /home/ -iname xx.txt  ;在home下搜索名为 xx.txt的文件，文件名完全匹配
 	/home/ajanuw/xx.txt
 	/home/ajanuw/play-python/xx.txt
@@ -152,8 +162,8 @@ WHAT    ;当前正在使用的命令
 
 >echo [选项] 参数  ;输出信息[-e] 有个-e选项 支持控制字符
 >>>>>>[\a输出警告音, \b退格删除键, \n换行, \r回车, \t TAB键, \v垂直制表符, \0 八进制, \x 16进制]
->echo "123abc"   ;将会打印123abc 
->echo -e "\e[1;32m 123abc \e[0m"   ;将会 打印绿色字体 
+>echo "123abc"   ;将会打印123abc
+>echo -e "\e[1;32m 123abc \e[0m"   ;将会 打印绿色字体
 >echo -e "123\nabc"   ;123换行abc
 
 ---创建一个 hello.sh 脚本文件
@@ -171,10 +181,10 @@ WHAT    ;当前正在使用的命令
 >source .bashrc  ;更新下
 
 10) xshell快捷键
-ctrl+c 强制退出 
-ctrl+l 清屏 clear一样 
-ctrl+u  删除命令 
-ctrl+a  光标移动到行首 
+ctrl+c 强制退出
+ctrl+l 清屏 clear一样
+ctrl+u  删除命令
+ctrl+a  光标移动到行首
 ctrl+e  光标移动到行尾
 ctrl+z  把命令放入后台
 ctrl+s  锁屏
@@ -197,7 +207,7 @@ ctrl+q  解锁屏
 > 替换
 >> 追加
 >echo "ajanuw" > a.txt  ;原本会打印在屏幕上的信息被从定向了到 a.txt文件里面
->echoo "123" 2>> a.txt  ;echoo是错误命令会打印错误信息，错误信息从定向需要加上 2 
+>echoo "123" 2>> a.txt  ;echoo是错误命令会打印错误信息，错误信息从定向需要加上 2
 
 >date >> a.txt 2>&1  ;追加的方式，把错误和正确的都写在文件中
 >date &>> a.txt  ;更上面一样
@@ -245,15 +255,15 @@ sudo apt-get install php-gd curl libcurl3 libcurl3-dev php-curl  安装扩展
 
 
 ubuntu 16.04 安装php7
-apt-get install php7.0  
-apt-get install libapache2-mod-php7.0  
-apt-get install php7.0-gd  
+apt-get install php7.0
+apt-get install libapache2-mod-php7.0
+apt-get install php7.0-gd
 测试：打开"终端窗口"，输入
-gedit /var/www/info.php  
-<?php phpinfo(); ?>"  
+gedit /var/www/info.php
+<?php phpinfo(); ?>"
 保存，文件创建成功。
 在火狐浏览器中输入"127.0.0.1\info.php"-->出现了php的版本信息页面，说明php安装配置成功。
- 
+
 ubuntu 16.04 php7 开启错误显示
 Modify the string " display_errors = Off" to "display_errors = On";
 then restart the apache2 service:
