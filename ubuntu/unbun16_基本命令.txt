@@ -83,12 +83,11 @@ r读4  w写2  x执行1
 ========================================================
 
 4) 文件搜索命令
-	4.1)文件搜索命令 locate +文件名参数 ;
+
+	4.1)文件搜索命令 locate 文件名参数 ;就1参数
 	特点：只能搜文件名，速度快，不能搜索新建文件，需要执行 >updatedb  ;更新数据库
 	>locate xx.txt
-	/home/ajanuw/xx.txt
-	/home/ajanuw/play-python/xx.txt
-	在两个地方搜索到了 xx.txt文件
+  >还是推荐使用find
 	/etc/updatedb.conf  筛选的配置文件
 
 	4.2)搜索命令的命令 >whereis 和 >which , 不能用来搜文件
@@ -96,26 +95,42 @@ r读4  w写2  x执行1
 	rm: /bin/rm
 >echo $PATH  ;是看环境变量
 
-	4.2）find [搜索范围] [搜索条件]  ;搜索文件和目录的命令，功能多，速度慢
-	>find /home/ -iname xx.txt  ;在home下搜索名为 xx.txt的文件，文件名完全匹配
-	/home/ajanuw/xx.txt
-	/home/ajanuw/play-python/xx.txt
+
+	4.2）find [搜索范围] [搜索条件]  ;搜索文件和目录的命令，功能多，速度慢,条件可多条 -mtime 0 -iname
+	>find /home/ -iname xx.txt
+  //上面这条命令 在home下搜索名为 xx.txt的文件，文件名完全匹配 -iname为忽略大小写并按文件名搜索
 
 	=========================================
-	linux  通配符
+	linux 通配符 配合搜索命令再好不过
 	*  匹配任意内容
 	?  匹配任意一个字符
-	[]  匹配人体一个括号中间的字符
+	[]  匹配任意一个括号中间的字符
 	=========================================
-
 	>find /home/ -iname "*.txt"		; 找后缀为.txt的全部文件 [i]是不区分大小写
-	/home/ajanuw/xx.txt
-	/home/ajanuw/play-python/xx.txt
+  >find /home/ajanuw/ -iname *.txt -o -iname *.js  // 搜索 txt文件和js文件
 
-	>find . -size 30k   ;搜索当前目录下等于30k的文件[-30, 30 , +30]
+
+  >find /home/ -mtime +10 //  按 时间搜索 查找10天前修改的文件
+  注： -10 十天之内修改的， 10 十天当天修改的， +10 十天前修改的
+    :  -atime 文件访问时间， -ctime 改变文件属性，-mtime 修改文件时间
+  >find /home/ -mtime 0  // 搜索当天修改的文件
+
+	>find . -size 30k   ; 按文件大小搜索  当前目录下等于30k的文件[-30, 30 , +30]
 	>find . -size +30k -a -size -50k   ;当前目录大于30k小于50k文件[-a and, -o or]
 	>find /home/ -size +5k -exec ls -lh {} \;    ;查询出信息同时管道执行 ls -lh
-	>frep [选项] 字符串 文件名 [-v取反, -i忽略大小写]
+  >find /home/ -size -30k -iname *.js // 搜索小于30k的js文件
+  >find /home/ -size +10k -a -size -50k  // -a两个条件都满足 -o满足一个即可
+
+
+	>grep [选项] 字符串 文件名 // 在文件里面的搜索指定的字符串 配合find命令 [-v取反不包涵后面的内容, -i忽略大小写]
+  // grep 命令在搜索到相应的内容后 会打印出来...
+  >find /home/ajanuw/ \( -iname "*.js" -o -iname "*.txt" \) -exec grep -i "hello" {} \; -exec ls {} \;
+  // 上面这条命令 搜索了 .txt和.js文件， 查找这些文件中带有"hello"字段的文件，在ls打印路径出来
+  // 需要加上括号， 括号需要转义， 不加括号默认 去最后一个结果
+
+
+
+
 
 5) 文件的压缩与解压
 >zip [-r] xx.zip xx.txt   ;把xx.txt压缩成为 xx.zip,[-r]为压缩目录结构必加参数
