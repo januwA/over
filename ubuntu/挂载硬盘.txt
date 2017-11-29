@@ -1,56 +1,52 @@
 
-MBR·ÖÇøÄ£Ê½
-MBR·ÖÇøÄ£Ê½£ºÖ÷·ÖÇø²»³¬¹ı4¸ö µ¥·ÖÇø×î´ó2TB
+MBRåˆ†åŒºæ¨¡å¼
+MBRåˆ†åŒºæ¨¡å¼ï¼šä¸»åˆ†åŒºä¸è¶…è¿‡4ä¸ª å•åˆ†åŒºæœ€å¤§2TB
 1eb = 1024pb, 1pb = 1024tb, 1tb = 1024gb
-ĞèÒª¹¤¾ß  fdisk
+éœ€è¦å·¥å…·  fdisk
 
-	fdisk -l ²é¿´µ±Ç°ËùÓĞµÄ ´ÅÅÌ£º
+	fdisk -l æŸ¥çœ‹å½“å‰æ‰€æœ‰çš„ ç£ç›˜ï¼š
 		Disk /dev/sdb: 5 GiB, 5368709120 bytes, 10485760 sectors
 		Disk /dev/sda: 60 GiB, 64424509440 bytes, 125829120 sectors
-	£º½øÈë·ÖÇøÄ£Ê½
-		£º fdisk /dev/sdb
- ½øÈë´ıÃüÄ£Ê½ ÊäÈëm²é¿´°ïÖú
-	n ´´½¨·ÖÇø
-		pÖ÷·ÖÇø  eÀ©ÕÅ·ÖÇø
+	ï¼šè¿›å…¥åˆ†åŒºæ¨¡å¼
+		ï¼š fdisk /dev/sdb
+ è¿›å…¥å¾…å‘½æ¨¡å¼ è¾“å…¥mæŸ¥çœ‹å¸®åŠ©
+	n åˆ›å»ºåˆ†åŒº
+		pä¸»åˆ†åŒº  eæ‰©å¼ åˆ†åŒº
 
-É¾³ı·ÖÇø Command (m for help): d
+åˆ é™¤åˆ†åŒº Command (m for help): d
 
-Ğ´Èë×öºÃµÄ·ÖÇø Command (m for help): w
+å†™å…¥åšå¥½çš„åˆ†åŒº Command (m for help): w
 
 
-gpT·ÖÇø£¨³£ÓÃ·½±ã£©
-	¹¤¾ßparted
-	(parted) select /dev/sdb  :ÇĞ»»²Ù×÷´ÅÅÌ
-	(parted) mklabel msdos :Ìí¼ÓMBR·ÖÇø
-	(parted) mklabel gpt  :Ìí¼ÓGPT·ÖÇø
-	(parted) print  ²é¿´·ÖÇøĞÅÏ¢
+gpTåˆ†åŒºï¼ˆå¸¸ç”¨æ–¹ä¾¿ï¼‰
+	å·¥å…·parted
+	(parted) select /dev/sdb  :åˆ‡æ¢æ“ä½œç£ç›˜
+	(parted) mklabel msdos :æ·»åŠ MBRåˆ†åŒº
+	(parted) mklabel gpt  :æ·»åŠ GPTåˆ†åŒº
+	(parted) print  æŸ¥çœ‹åˆ†åŒºä¿¡æ¯
 
-	parted) mkpart  Ìí¼Ó·ÖÇø
-	(parted) mkpart ajanuw02 1000 2000  ¡¾Ìí¼ÓÃüÁî¡¿ ¡¾Ó²ÅÌÃû¡¿ ¡¾ÖØ1000m¿ªÊ¼¡¿ ¡¾2000m½áÊø¡¿ 
-	print ²é¿´Ìí¼ÓÍê³É
+	parted) mkpart  æ·»åŠ åˆ†åŒº
+	(parted) mkpart ajanuw02 1000 2000  ã€æ·»åŠ å‘½ä»¤ã€‘ ã€ç¡¬ç›˜åã€‘ ã€é‡1000må¼€å§‹ã€‘ ã€2000mç»“æŸã€‘
+	print æŸ¥çœ‹æ·»åŠ å®Œæˆ
 Number  Start   End     Size   File system  Name      Flags
  1      1049kB  1000MB  999MB  ext2         ajanuw
  2      1000MB  2000MB  999MB               ajanuw02
 
-(parted) rm 2 :É¾³ı±àºÅÎª2 µÄ·ÖÇø 
-(parted) un GB  £º·Ö¿Õ¼äÊ±Ä¬ÈÏ¾ÍÎªgbÁË ²»ÊÇm
- 
+(parted) rm 2 :åˆ é™¤ç¼–å·ä¸º2 çš„åˆ†åŒº
+(parted) un GB  ï¼šåˆ†ç©ºé—´æ—¶é»˜è®¤å°±ä¸ºgbäº† ä¸æ˜¯m
 
-¸ñÊ½»¯´ÅÅÌ 
+
+æ ¼å¼åŒ–ç£ç›˜
 	mkfs
 	root@ubuntu:/# mkfs.ext3 /dev/sdb1
 
- ¹ÒÔØ´ÅÅÌ  Ä¬ÈÏ¹ÒÔØÄ¿Â¼ mnt /
-	root@ubuntu:/# mount /dev/sdb1 /mnt/ajanuw/   :mount¹ÒÔØÃüÁî  ¹ÒÔÚÓ²ÅÌÂ·¾¶
-	¹ÒÔØÄ¿Â¼Â·¾¶
-root@ubuntu:/# umount /mnt/ajanuw/   £º£ºĞ¶ÔØ¹ÒÔØµã
+ æŒ‚è½½ç£ç›˜  é»˜è®¤æŒ‚è½½ç›®å½• mnt /
+	root@ubuntu:/# mount /dev/sdb1 /mnt/ajanuw/   :mountæŒ‚è½½å‘½ä»¤  æŒ‚åœ¨ç¡¬ç›˜è·¯å¾„
+	æŒ‚è½½ç›®å½•è·¯å¾„
+root@ubuntu:/# umount /mnt/ajanuw/   ï¼šï¼šå¸è½½æŒ‚è½½ç‚¹
 
-£º£ºÏµÍ³ÖØÆôºó¹ÒÔØÊ§Ğ§£¬Èç¹ûÒªÓÀ¾Ã¹ÒÔØ¸ü¸ÄÅäÖÃÎÄ¼ş
+ï¼šï¼šç³»ç»Ÿé‡å¯åæŒ‚è½½å¤±æ•ˆï¼Œå¦‚æœè¦æ°¸ä¹…æŒ‚è½½æ›´æ”¹é…ç½®æ–‡ä»¶
 root@ubuntu:/mnt# vim + /etc/fstab
-ÔÚ×îºóÒ»ĞĞÌí¼Ó Â·¾¶
+åœ¨æœ€åä¸€è¡Œæ·»åŠ  è·¯å¾„
 /dev/fd0        /media/floppy0  auto    rw,user,noauto,exec,utf8 0       0
 /dev/sdb1        /mnt/ajanuw  wxt3   defaults 0      0
-
-
-
-

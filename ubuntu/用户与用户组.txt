@@ -1,41 +1,41 @@
-/etc/group/   ���洢��ǰϵͳ���� �û��� ��Ϣ
+/etc/group/   ）存储当前系统所有 用户组 信息
 ajanuw : x        :  1000 :aa,bb,cc
-����    �������룺���ţ������û��б�
+组名    ：组密码：组编号：组中用户列表
 
-���� 0 ��root  �� 1-499��ϵͳԤ����ϵͳ�����õ� �� >=500������û���
+组编号 0 是root  ， 1-499是系统预留更系统软件用的 ， >=500分配给用户组
 
-/etc/gshadow ���浫��ǰϵͳ �û��� ������Ϣ
+/etc/gshadow 储存但当前系统 用户组 密码信息
 root  :   *       :               :a,b,c
-���� �������룺������ߣ������û��б�
+组名 ：组密码：组管理者：组中用户列表
 
 
-/etc/passwd ���浱ǰϵͳ���� �û� ��Ϣ
+/etc/passwd 储存当前系统所有 用户 信息
 ajanuw:         x       :     1000       :1000:       Ubuntu-Lts-server,,,:/home/ajanuw:/bin/bash
-�û���������ռλ�����û���ţ��û����ţ��û�ע����Ϣ��       �û�Ŀ¼��	    shell����
+用户名：密码占位符：用户编号：用户组编号：用户注释信息：       用户目录：	    shell类型
 
-/etc/shadow  ���浱ǰϵͳ���� �û� ������Ϣ
+/etc/shadow  储存当前系统所有 用户 密码信息
 
-<----------------- �����û���
-root@ubuntu:/# groupadd number01  ) groupadd����  number01�û�����
-	            groupadd -g 1995 number01 )����ͬʱ�����û���༭����
-root@ubuntu:/# groupmod -n newnumber number01  )�޸��û�����groupmod -n����newnumber����number����
+<----------------- 创建用户组
+root@ubuntu:/# groupadd number01  ) groupadd创建  number01用户组名
+	            groupadd -g 1995 number01 )可以同时建立用户组编辑组编号
+root@ubuntu:/# groupmod -n newnumber number01  )修改用户组名groupmod -n命令newnumber新名number旧名
 
-root@ubuntu:/# groupmod -g 1995 newnumber )��������
-
-
-<------------ɾ���û��顾ɾ���û�������ɾ���û����µ��û���
-root@ubuntu:/# groupdel newnumber ��groupdel���� newnumber����
+root@ubuntu:/# groupmod -g 1995 newnumber )更改组编号
 
 
-<---------------����  �û�
-root@ubuntu:/# useradd -g allproject zgq ����allproject�û������������û�zgq
-
-root@ubuntu:/# usermod -c num zgq ���޸��û��ı�ע��Ϣ
-root@ubuntu:/# usermod -l zh zgq  ���޸��û�����������ǰ �����ں�
-root@ubuntu:/# usermod -d /home/zh zh ��Ϊ���ĵ��û�����Ŀ¼
-root@ubuntu:/# usermod -g allproject he �� ���û��Ž������û�������д�û�������д�û���
-root@ubuntu:/# userdel zh ��ɾ���û�����ɾ���û��ļ���
-root@ubuntu:/# userdel -r zh ��ɾ���û���ͬʱɾ���û��ļ���
+<------------删除用户组【删除用户组是先删除用户组下的用户】
+root@ubuntu:/# groupdel newnumber ）groupdel命令 newnumber组名
 
 
-root@ubuntu:/# touch /etc/nologin �� �������ļ�����root���޷���½������
+<---------------创建  用户
+root@ubuntu:/# useradd -g allproject zgq ）往allproject用户组里面添加用户zgq
+
+root@ubuntu:/# usermod -c num zgq ）修改用户的备注信息
+root@ubuntu:/# usermod -l zh zgq  ）修改用户名新名字在前 旧名在后
+root@ubuntu:/# usermod -d /home/zh zh ）为更改的用户添加目录
+root@ubuntu:/# usermod -g allproject he ） 把用户放进其它用户组里先写用户组名在写用户名
+root@ubuntu:/# userdel zh ）删除用户（不删除用户文件）
+root@ubuntu:/# userdel -r zh ）删除用户（同时删除用户文件）
+
+
+root@ubuntu:/# touch /etc/nologin ） 创建此文件除了root将无法登陆服务器
